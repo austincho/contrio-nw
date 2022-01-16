@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <link rel="stylesheet" type="text/css" href="main.css">
+    <script type="text/javascript" src="myABS.js"></script>
+
+    <script src="./node_modules/web3/dist/web3.min.js"></script>
+
+</head>
+<body>
+    <div class="container">
+
+        <h1>Contrio</h1>
+
+        <!--MODIFY CONTRACT-->
+        <h2 id="modifyContract">Modify Contract</h2>
+
+        <label for="_freelancerID" class="col-lg-2 control-label">Freelancer ID (Address)</label>
+        <input id="_freelancerID" type="text">
+
+        <label for="_name_freelancer" class="col-lg-2 control-label">Name of Freelancer</label>
+        <input id="_name_freelancer" type="text">
+
+        <label for="_name_client" class="col-lg-2 control-label">Name of Client</label>
+        <input id="_name_client" type="text">
+
+        <label for="_date_endProject" class="col-lg-2 control-label">Project Due Date</label>
+        <input id="_date_endProject" type="text">
+
+        <label for="_promises" class="col-lg-2 control-label">Promises</label>
+        <input id="_promises" type="text">
+
+        <label for="_paymentAmount" class="col-lg-2 control-label">Payment Amount</label>
+        <input id="_paymentAmount" type="text">
+
+        <label for="message" class="col-lg-2 control-label">Other Messages</label>
+        <input id="message" type="text">
+
+        <button id="button_modifyContract">Click to Modify Contract</button>
+
+        <!--GET MY ADDRESS-->
+        <h2 id="getMyAddress">Get My Address</h2>
+
+        <button id="button_getMyAddress">Click to Get Your Address</button>
+        <label for="yourAddress" class="col-lg-2 control-label"></label>
+
+
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>d
+
+    <script>
+        if (typeof web3 !== 'undefined') {
+            web3 = new Web3(web3.currentProvider);
+        } else {
+            // set the provider you want from Web3.providers
+            web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+        }
+
+        web3.eth.defaultAccount = web3.eth.accounts[0]; // get the first account (of the given 10 free accounts)
+
+        // find the parameter from: Solidity Compilier -> ABI
+        var smartContract = new web3.eth.Contract(
+            myABS.abs
+        );
+
+        var contrio = smartContract.at('0xd9145CCE52D386f254917e481eB44e9943F39138');
+        console.log(contrio);        
+
+        $("#button_modifyContract").click(function() {
+            contrio.modifyContract(
+                $("#_freelancerID").val(), 
+                $("#_name_freelancer").val(),
+                $("#_name_client").val(), 
+                $("#_date_endProject").val(),
+                $("#_promises").val(), 
+                $("#_paymentAmount").val(),
+                $("#message").val());
+        });
+
+        $("#button_getMyAddress").click(function() {
+            contrio.getMyAddress(function(error, result){
+                if(!error)
+                    {
+                        $("#yourAddress").html(result);
+                        console.log(result);
+                    }
+                else
+                    console.error(error);
+            });
+        });
+
+    </script>
+
+</body>
+</html>

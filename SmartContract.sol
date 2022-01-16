@@ -68,6 +68,10 @@ contract SmartContract {
         projectState = ProjectState.INITIALIZED;
     }
 
+    function getMyAddress() public view returns(address myAddress) {
+        return msg.sender;
+    }
+
     function modifyContract(address _freelancerID, string memory _name_freelancer, string memory _name_client, string memory _date_endProject, string memory _promises, uint256 _paymentAmount, string memory message) public currProjectState(ProjectState.INITIALIZED) freelancerOrClientOnly {
         freelancerID = payable(_freelancerID);
 
